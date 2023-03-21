@@ -6,5 +6,5 @@ matplotlib==3.5.1
 numpy==1.22.3
 azureml-core==1.39.0
 requests==2.27.1
-python-dotenv==0.19.3
+python-dotenv==0.20.0
 
