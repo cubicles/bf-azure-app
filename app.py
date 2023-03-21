@@ -4,6 +4,13 @@ import matplotlib.pyplot as plt
 import json
 import requests
 import base64
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+api_key = os.environ.get("API_KEY")
+scoring_uri = os.environ.get("SCORING_URI")
 
 fig = plt.figure()
 
