@@ -28,8 +28,6 @@ def main():
         st.write(predictions)
         st.pyplot(fig)
 
-import re
-
 def predict(file_uploaded):
     # Convert the file-like object to a PIL Image object
     image = Image.open(file_uploaded)
@@ -57,12 +55,16 @@ def predict(file_uploaded):
     response_str = response.content.decode('utf-8')
     print(response_str)
     
-    match = re.search(r'\{"prediction"\s*:\s*"([^"]+)"\}', response_str)
+    #match = re.search(r'\{"prediction"\s*:\s*"([^"]+)"\}', response_str)
+    #match = re.search(r'\{"prediction"\s*:\s*"([^"]+?)\s*"\}', response_str)
+    match = re.search(r'["\']?prediction["\']?\s*:\s*["\']?(\w+(\s+\w+)*)["\']?', response_str)
+
     if match:
-        breed = match.group(1).strip()
-        return breed
+        breed = match.group(1)
     else:
-        return response_str.strip()
+        breed = f"Error!: breed not found in response. Response: {response_str}"
+
+    return breed.strip()
 
 if __name__ == "__main__":
     main()

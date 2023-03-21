@@ -7,7 +7,6 @@ import base64
 import os
 from dotenv import load_dotenv
 import io
-import re
 
 load_dotenv()
 
@@ -28,9 +27,11 @@ def main():
         st.write(predictions)
         st.pyplot(fig)
 
-import re
-
 def predict(file_uploaded):
+    # Remove this block of code:
+    # with open('class_names.txt') as f:
+    #     class_names = f.readlines()
+
     # Convert the file-like object to a PIL Image object
     image = Image.open(file_uploaded)
 
@@ -54,15 +55,18 @@ def predict(file_uploaded):
     response = requests.post(scoring_uri, data=payload, headers=headers)
 
     # Get the prediction result
-    response_str = response.content.decode('utf-8')
-    print(response_str)
-    
-    match = re.search(r'\{"prediction"\s*:\s*"([^"]+)"\}', response_str)
-    if match:
-        breed = match.group(1).strip()
-        return breed
+    print(response.content)
+
+    if response.status_code == 200:
+        response_data = response.json()
+        if 'prediction' in response_data:
+            breed = response_data['prediction'].strip()  # Remove newline character
+        else:
+            breed = f"Error!: 'prediction' key not found in the response. Response: {response_data}"
     else:
-        return response_str.strip()
+        breed = f"Error!: {response.status_code}, {response.text}"
+
+    return breed   
 
 if __name__ == "__main__":
     main()
