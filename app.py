@@ -37,14 +37,15 @@ def predict(image):
     img_base64 = base64.b64encode(img_data).decode('utf-8')
 
     # Set the content type to 'application/octet-stream'
-    api_key = ''  # ki
+    api_key = os.environ['API_KEY']
+
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {api_key}'
     }
 
     # Send the request with the image data
-    scoring_uri = ''  # uri
+    scoring_uri = os.environ['SCORING_URI']
     payload = json.dumps((img_base64, 'application/octet-stream'))
     response = requests.post(scoring_uri, data=payload, headers=headers)
 
